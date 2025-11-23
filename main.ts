@@ -2,7 +2,7 @@ import * as core from "@actions/core";
 import * as exec from "@actions/exec";
 import * as tc from "@actions/tool-cache";
 import { createHash } from "node:crypto";
-import { readFile, chmod, mkdir, rm } from "node:fs/promises";
+import { readFile, chmod, rm } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir, homedir, platform, arch } from "node:os";
 import { mkdtempSync } from "node:fs";
