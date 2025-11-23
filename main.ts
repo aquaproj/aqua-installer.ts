@@ -2,9 +2,9 @@ import * as core from "@actions/core";
 import * as exec from "@actions/exec";
 import * as tc from "@actions/tool-cache";
 import { createHash } from "node:crypto";
-import { readFile, chmod, rm } from "node:fs/promises";
+import { chmod, readFile, rm } from "node:fs/promises";
 import { join } from "node:path";
-import { tmpdir, homedir, platform, arch } from "node:os";
+import { arch, homedir, platform, tmpdir } from "node:os";
 import { mkdtempSync } from "node:fs";
 import process from "node:process";
 
@@ -148,7 +148,11 @@ export const install = async (options: InstallOptions = {}): Promise<void> => {
     const downloadPath = await downloadFile(url);
     await verifyChecksum(downloadPath, expectedChecksum);
 
-    const extractedPath = await extractArchive(downloadPath, tempDir, isWindows);
+    const extractedPath = await extractArchive(
+      downloadPath,
+      tempDir,
+      isWindows,
+    );
 
     const aquaBinaryPath = join(
       extractedPath,
