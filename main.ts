@@ -80,7 +80,9 @@ async function downloadFile(url: string, destPath: string): Promise<void> {
 
   const response = await fetch(url);
   if (!response.ok) {
-    throw new Error(`Failed to download: ${response.status} ${response.statusText}`);
+    throw new Error(
+      `Failed to download: ${response.status} ${response.statusText}`,
+    );
   }
 
   const file = await Deno.open(destPath, { write: true, create: true });
@@ -109,7 +111,9 @@ async function verifyChecksum(
 
 async function extractTarGz(tarGzPath: string, destDir: string): Promise<void> {
   const file = await Deno.open(tarGzPath, { read: true });
-  const reader = readerFromStreamReader(file.readable.pipeThrough(new DecompressionStream("gzip")).getReader());
+  const reader = readerFromStreamReader(
+    file.readable.pipeThrough(new DecompressionStream("gzip")).getReader(),
+  );
   const untar = new Untar(reader);
 
   for await (const entry of untar) {
@@ -188,15 +192,21 @@ export const install = async (options: InstallOptions = {}): Promise<void> => {
     await runAquaUpdate(aquaBinaryPath, options.version);
 
     console.error("");
-    console.error("===============================================================");
+    console.error(
+      "===============================================================",
+    );
     console.error(`[INFO] aqua is installed into ${installPath}`);
-    console.error('[INFO] Please add the path to the environment variable "PATH"');
+    console.error(
+      '[INFO] Please add the path to the environment variable "PATH"',
+    );
 
     const installDirTemplate = isWindows
       ? "${AQUA_ROOT_DIR:-$HOME/AppData/Local/aquaproj-aqua}/bin"
       : "${AQUA_ROOT_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/aquaproj-aqua}/bin";
     console.error(`[INFO] export PATH=${installDirTemplate}:$PATH`);
-    console.error("===============================================================");
+    console.error(
+      "===============================================================",
+    );
     console.error("");
 
     const versionCommand = new Deno.Command(installPath, { args: ["-v"] });
