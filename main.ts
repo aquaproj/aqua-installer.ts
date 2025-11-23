@@ -1,7 +1,12 @@
-import { ensureDir } from "@std/fs";
-import { join } from "@std/path";
-import { Untar } from "@std/archive/untar";
-import { readerFromStreamReader } from "@std/io/reader-from-stream-reader";
+import * as core from "@actions/core";
+import * as exec from "@actions/exec";
+import * as tc from "@actions/tool-cache";
+import { createHash } from "node:crypto";
+import { readFile, chmod, mkdir, rm } from "node:fs/promises";
+import { join } from "node:path";
+import { tmpdir, homedir, platform, arch } from "node:os";
+import { mkdtempSync } from "node:fs";
+import process from "node:process";
 
 interface InstallOptions {
   version?: string;
@@ -36,13 +41,13 @@ const CHECKSUMS = new Map([
 ]);
 
 function getOS(): string {
-  const os = Deno.build.os;
+  const os = platform();
   switch (os) {
     case "darwin":
       return "darwin";
     case "linux":
       return "linux";
-    case "windows":
+    case "win32":
       return "windows";
     default:
       throw new Error(`Unsupported OS: ${os}`);
@@ -50,57 +55,46 @@ function getOS(): string {
 }
 
 function getArch(): string {
-  const arch = Deno.build.arch;
-  switch (arch) {
-    case "x86_64":
+  const architecture = arch();
+  switch (architecture) {
+    case "x64":
       return "amd64";
-    case "aarch64":
+    case "arm64":
       return "arm64";
     default:
-      throw new Error(`Unsupported architecture: ${arch}`);
+      throw new Error(`Unsupported architecture: ${architecture}`);
   }
 }
 
 function getInstallPath(os: string): string {
-  const aquaRoot = Deno.env.get("AQUA_ROOT_DIR");
+  const aquaRoot = process.env.AQUA_ROOT_DIR;
   if (os === "windows") {
     const base = aquaRoot ||
-      join(Deno.env.get("HOME") || "", "AppData", "Local", "aquaproj-aqua");
+      join(homedir(), "AppData", "Local", "aquaproj-aqua");
     return join(base, "bin", "aqua.exe");
   } else {
-    const xdgDataHome = Deno.env.get("XDG_DATA_HOME") ||
-      join(Deno.env.get("HOME") || "", ".local", "share");
+    const xdgDataHome = process.env.XDG_DATA_HOME ||
+      join(homedir(), ".local", "share");
     const base = aquaRoot || join(xdgDataHome, "aquaproj-aqua");
     return join(base, "bin", "aqua");
   }
 }
 
-async function downloadFile(url: string, destPath: string): Promise<void> {
-  console.error(`[INFO] Downloading ${url} ...`);
-
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(
-      `Failed to download: ${response.status} ${response.statusText}`,
-    );
-  }
-
-  const file = await Deno.open(destPath, { write: true, create: true });
-  await response.body?.pipeTo(file.writable);
+async function downloadFile(url: string): Promise<string> {
+  core.info(`Downloading ${url} ...`);
+  return await tc.downloadTool(url);
 }
 
 async function verifyChecksum(
   filePath: string,
   expectedChecksum: string,
 ): Promise<void> {
-  console.error(`[INFO] Verifying checksum ...`);
+  core.info("Verifying checksum ...");
 
-  const fileData = await Deno.readFile(filePath);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", fileData);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray.map((b) => b.toString(16).padStart(2, "0")).join(
-    "",
-  );
+  const fileData = await readFile(filePath);
+  const hash = createHash("sha256");
+  hash.update(fileData);
+  const hashHex = hash.digest("hex");
 
   if (hashHex !== expectedChecksum) {
     throw new Error(
@@ -109,33 +103,15 @@ async function verifyChecksum(
   }
 }
 
-async function extractTarGz(tarGzPath: string, destDir: string): Promise<void> {
-  const file = await Deno.open(tarGzPath, { read: true });
-  const reader = readerFromStreamReader(
-    file.readable.pipeThrough(new DecompressionStream("gzip")).getReader(),
-  );
-  const untar = new Untar(reader);
-
-  for await (const entry of untar) {
-    if (entry.type === "file") {
-      const destPath = join(destDir, entry.fileName);
-      await ensureDir(join(destDir));
-      const destFile = await Deno.open(destPath, {
-        write: true,
-        create: true,
-      });
-      await entry.pipeTo(destFile.writable);
-    }
-  }
-}
-
-async function extractZip(zipPath: string, destDir: string): Promise<void> {
-  const command = new Deno.Command("unzip", {
-    args: ["-q", zipPath, "-d", destDir],
-  });
-  const output = await command.output();
-  if (!output.success) {
-    throw new Error("Failed to extract zip file");
+async function extractArchive(
+  archivePath: string,
+  destDir: string,
+  isWindows: boolean,
+): Promise<string> {
+  if (isWindows) {
+    return await tc.extractZip(archivePath, destDir);
+  } else {
+    return await tc.extractTar(archivePath, destDir);
   }
 }
 
@@ -144,24 +120,19 @@ async function runAquaUpdate(
   version?: string,
 ): Promise<void> {
   const args = version ? ["update-aqua", version] : ["update-aqua"];
-  console.error(`[INFO] ${aquaPath} ${args.join(" ")}`);
+  core.info(`${aquaPath} ${args.join(" ")}`);
 
-  const command = new Deno.Command(aquaPath, { args });
-  const output = await command.output();
-
-  if (!output.success) {
-    throw new Error("Failed to run aqua update-aqua");
-  }
+  await exec.exec(aquaPath, args);
 }
 
 export const install = async (options: InstallOptions = {}): Promise<void> => {
   const os = getOS();
-  const arch = getArch();
+  const architecture = getArch();
   const installPath = getInstallPath(os);
 
   const isWindows = os === "windows";
   const ext = isWindows ? "zip" : "tar.gz";
-  const filename = `aqua_${os}_${arch}.${ext}`;
+  const filename = `aqua_${os}_${architecture}.${ext}`;
   const url =
     `https://github.com/aquaproj/aqua/releases/download/${BOOTSTRAP_VERSION}/${filename}`;
 
@@ -170,49 +141,41 @@ export const install = async (options: InstallOptions = {}): Promise<void> => {
     throw new Error(`No checksum found for ${filename}`);
   }
 
-  console.error(
-    `[INFO] Installing aqua ${BOOTSTRAP_VERSION} for bootstrapping...`,
-  );
+  core.info(`Installing aqua ${BOOTSTRAP_VERSION} for bootstrapping...`);
 
-  const tempDir = await Deno.makeTempDir();
+  const tempDir = mkdtempSync(join(tmpdir(), "aqua-"));
   try {
-    const downloadPath = join(tempDir, filename);
-    await downloadFile(url, downloadPath);
+    const downloadPath = await downloadFile(url);
     await verifyChecksum(downloadPath, expectedChecksum);
 
-    if (isWindows) {
-      await extractZip(downloadPath, tempDir);
-    } else {
-      await extractTarGz(downloadPath, tempDir);
-    }
+    const extractedPath = await extractArchive(downloadPath, tempDir, isWindows);
 
-    const aquaBinaryPath = join(tempDir, isWindows ? "aqua.exe" : "aqua");
-    await Deno.chmod(aquaBinaryPath, 0o755);
+    const aquaBinaryPath = join(
+      extractedPath,
+      isWindows ? "aqua.exe" : "aqua",
+    );
+    await chmod(aquaBinaryPath, 0o755);
 
     await runAquaUpdate(aquaBinaryPath, options.version);
 
-    console.error("");
-    console.error(
+    core.info("");
+    core.info(
       "===============================================================",
     );
-    console.error(`[INFO] aqua is installed into ${installPath}`);
-    console.error(
-      '[INFO] Please add the path to the environment variable "PATH"',
-    );
+    core.info(`aqua is installed into ${installPath}`);
+    core.info('Please add the path to the environment variable "PATH"');
 
     const installDirTemplate = isWindows
       ? "${AQUA_ROOT_DIR:-$HOME/AppData/Local/aquaproj-aqua}/bin"
       : "${AQUA_ROOT_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/aquaproj-aqua}/bin";
-    console.error(`[INFO] export PATH=${installDirTemplate}:$PATH`);
-    console.error(
+    core.info(`export PATH=${installDirTemplate}:$PATH`);
+    core.info(
       "===============================================================",
     );
-    console.error("");
+    core.info("");
 
-    const versionCommand = new Deno.Command(installPath, { args: ["-v"] });
-    const versionOutput = await versionCommand.output();
-    console.log(new TextDecoder().decode(versionOutput.stdout));
+    await exec.exec(installPath, ["-v"]);
   } finally {
-    await Deno.remove(tempDir, { recursive: true });
+    await rm(tempDir, { recursive: true, force: true });
   }
 };
