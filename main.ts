@@ -66,7 +66,7 @@ function getArch(): string {
   }
 }
 
-function getInstallPath(os: string): string {
+export function getInstallPath(os: string): string {
   const aquaRoot = process.env.AQUA_ROOT_DIR;
   if (os === "windows") {
     const base = aquaRoot ||
