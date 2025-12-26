@@ -1,6 +1,6 @@
 {
   "name": "@aquaproj/aqua-installer",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "exports": "./main.ts",
   "tasks": {
     "dev": "deno run --watch main.ts"
