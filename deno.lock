@@ -3,7 +3,7 @@
   "specifiers": {
     "jsr:@std/assert@1": "1.0.15",
     "jsr:@std/internal@^1.0.12": "1.0.12",
-    "npm:@actions/core@^1.11.1": "1.11.1",
+    "npm:@actions/core@3": "3.0.1",
     "npm:@actions/exec@^1.1.1": "1.1.1",
     "npm:@actions/github@^6.0.1": "6.0.1_@octokit+core@5.2.2",
     "npm:@actions/tool-cache@4": "4.0.0",
@@ -22,13 +22,6 @@
     }
   },
   "npm": {
-    "@actions/core@1.11.1": {
-      "integrity": "sha512-hXJCSrkwfA46Vd9Z3q4cpEpHB1rL5NG04+/rbqW9d3+CSvtB1tYe8UTpAlixa1vj0m/ULglfEK2UKxMGxCxv5A==",
-      "dependencies": [
-        "@actions/exec@1.1.1",
-        "@actions/http-client@2.2.3"
-      ]
-    },
     "@actions/core@3.0.1": {
       "integrity": "sha512-a6d/Nwahm9fliVGRhdhofo40HjHQasUPusmc7vBfyky+7Z+P2A1J68zyFVaNcEclc/Se+eO595oAr5nwEIoIUA==",
       "dependencies": [
@@ -83,7 +76,7 @@
     "@actions/tool-cache@4.0.0": {
       "integrity": "sha512-L8P9HbXvpvqjZDveb/fdsa55IVC0trfPgQ4ZwGo6r5af6YDVdM9vMGPZ7rgY2fAT9gGj4PSYd6bYlg3p3jD78A==",
       "dependencies": [
-        "@actions/core@3.0.1",
+        "@actions/core",
         "@actions/exec@3.0.0",
         "@actions/http-client@4.0.1",
         "@actions/io@3.0.2",
@@ -312,7 +305,7 @@
   "workspace": {
     "dependencies": [
       "jsr:@std/assert@1",
-      "npm:@actions/core@^1.11.1",
+      "npm:@actions/core@3",
       "npm:@actions/exec@^1.1.1",
       "npm:@actions/github@^6.0.1",
       "npm:@actions/tool-cache@4",
