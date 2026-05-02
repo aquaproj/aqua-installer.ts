@@ -1,28 +1,28 @@
 {
   "checksums": [
     {
-      "id": "github_release/github.com/denoland/deno/v2.7.1/deno-aarch64-apple-darwin.zip",
-      "checksum": "BC3392A0F50BE9A1ECB68596530319308639A6F69D99678A0018C47E23A10C1F",
+      "id": "github_release/github.com/denoland/deno/v2.7.13/deno-aarch64-apple-darwin.zip",
+      "checksum": "E2E63288D11E3F36855B60D77585844CBC5146600CBC7224E2D9276A35378089",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/denoland/deno/v2.7.1/deno-aarch64-unknown-linux-gnu.zip",
-      "checksum": "BFE62E582FACEB9885748F00A9F44CD5AF458B9D08D7AC8275C4048FF1BB1540",
+      "id": "github_release/github.com/denoland/deno/v2.7.13/deno-aarch64-unknown-linux-gnu.zip",
+      "checksum": "C017FA8389BD96B6B07B3416BDB8D37074AB2FF1C83A9C94F7B2A6A7DA026DAC",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/denoland/deno/v2.7.1/deno-x86_64-apple-darwin.zip",
-      "checksum": "5478393FC9893C6F3516CEE7579453A990834CEEBF5FF44AACED2D0F285302D7",
+      "id": "github_release/github.com/denoland/deno/v2.7.13/deno-x86_64-apple-darwin.zip",
+      "checksum": "B4153BEE3C24074C83513E1A209FFC982277F88B184CACCD4DE9BA5113CFA2E5",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/denoland/deno/v2.7.1/deno-x86_64-pc-windows-msvc.zip",
-      "checksum": "94D71D4772436DE27A0495933CA4BAB7B6895992622B65BAEAF4B7995DAE1E69",
+      "id": "github_release/github.com/denoland/deno/v2.7.13/deno-x86_64-pc-windows-msvc.zip",
+      "checksum": "3925338E4548F54076BD24285779D5D2A1640A7941F564E7C7D992EF10D68D41",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/denoland/deno/v2.7.1/deno-x86_64-unknown-linux-gnu.zip",
-      "checksum": "B7154AE42839D7B1453422E2F33C907E5C68FDE8FE9F145CD43B8DD083671A6F",
+      "id": "github_release/github.com/denoland/deno/v2.7.13/deno-x86_64-unknown-linux-gnu.zip",
+      "checksum": "D7B452DE2578742889B70A7E3CF90EB14B8E6B1BCA4758380DA3630D694F04FF",
       "algorithm": "sha256"
     },
     {
@@ -56,38 +56,38 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/suzuki-shunsuke/nllint/v1.0.0/nllint_darwin_amd64.tar.gz",
-      "checksum": "5733518D44F7EAE2B4B16B0EA6617597C89B2EB084A4E6101A1DC03716266B6C",
+      "id": "github_release/github.com/suzuki-shunsuke/nllint/v1.1.0/nllint_darwin_amd64.tar.gz",
+      "checksum": "25D719C1B23D37F748B6453A2DBFFC3E9C998731AF1E8114956A4AEBA413760C",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/suzuki-shunsuke/nllint/v1.0.0/nllint_darwin_arm64.tar.gz",
-      "checksum": "E854EE0AA0DD83273D3B68E335BC025FDA721A32A3373091DFDEC3A582D1EC41",
+      "id": "github_release/github.com/suzuki-shunsuke/nllint/v1.1.0/nllint_darwin_arm64.tar.gz",
+      "checksum": "B17088ADAA6D29CD59CFE3142CFBB082874F52039D39BEB3DE0F4209895E44F7",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/suzuki-shunsuke/nllint/v1.0.0/nllint_linux_amd64.tar.gz",
-      "checksum": "F54EC24CE1C344B611F6D80155396101D38E72B7F88E2CA8B9BFADC16307AE35",
+      "id": "github_release/github.com/suzuki-shunsuke/nllint/v1.1.0/nllint_linux_amd64.tar.gz",
+      "checksum": "4ADB11D727BE9EA1220A6A63B2413EDBAFEC1E86C58BFFE772043AFC500F1FB9",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/suzuki-shunsuke/nllint/v1.0.0/nllint_linux_arm64.tar.gz",
-      "checksum": "EC8D94494C70F4285A39375F385A4E52F945C597A3A5361ADF3DD9F1C8263CE4",
+      "id": "github_release/github.com/suzuki-shunsuke/nllint/v1.1.0/nllint_linux_arm64.tar.gz",
+      "checksum": "F7EF1B230E32943AA128C2152A477C1229592E973C3399DB4EAB4E123660464B",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/suzuki-shunsuke/nllint/v1.0.0/nllint_windows_amd64.zip",
-      "checksum": "4ABEBC98AF160C06C988F1421F0CF991FBDBFB6789CC1681C5C8E33C48A70160",
+      "id": "github_release/github.com/suzuki-shunsuke/nllint/v1.1.0/nllint_windows_amd64.zip",
+      "checksum": "79F84AB841B7F990480D9E2920F1F78A256DCE9F15E6F5F66612E747A6283C8D",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/suzuki-shunsuke/nllint/v1.0.0/nllint_windows_arm64.zip",
-      "checksum": "7493FF32F027507BDA9E9308E4AA25D640AA16B0287F7656A7C0A61AF907D270",
+      "id": "github_release/github.com/suzuki-shunsuke/nllint/v1.1.0/nllint_windows_arm64.zip",
+      "checksum": "F2BE3CC16A4684D4DD511A1339554FC85B3E5FFC74061801BA18F680527E29DE",
       "algorithm": "sha256"
     },
     {
-      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.476.0/registry.yaml",
-      "checksum": "76F939441EF9C2B56F8ABC96BB1A93546C0A343E90507278DA61B3194799682970BB03A4E41E0DE2F05F2C9E080CADB64259A0B8FC978CB50E3139F412D6CE09",
+      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.502.0/registry.yaml",
+      "checksum": "1C62AD0FCA9BBA92D4D9C52411F2BE80A030927F1B24FB1673207366B8F2C2338A65633E1E50B0F9D39F4AA77B93D447611F9D892AA2B7FE38CE1473024D6BD9",
       "algorithm": "sha512"
     }
   ]
