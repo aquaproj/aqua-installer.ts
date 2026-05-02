@@ -14,7 +14,7 @@
   },
   "imports": {
     "@actions/core": "npm:@actions/core@^3.0.0",
-    "@actions/exec": "npm:@actions/exec@^1.1.1",
+    "@actions/exec": "npm:@actions/exec@^3.0.0",
     "@actions/tool-cache": "npm:@actions/tool-cache@^4.0.0",
     "@actions/github": "npm:@actions/github@^9.0.0",
     "@octokit/rest": "npm:@octokit/rest@^22.0.0",
